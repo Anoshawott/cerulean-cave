@@ -1,0 +1,687 @@
+---
+title: "Analysing measures of participation with respect to academic performance to delineate the effectiveness/quality of higher education at the universtiy of sydney (USYD)"
+author: "By Anosh.S, Stuart.T, Matteus.R and Kshitij.M"
+subtitle: ""
+date: "University of Sydney | DATA1001 | MAY"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    self_contained: yes
+    theme: cosmo
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+---
+
+<br>
+
+# Executive Summary
+
+This study attempts to analyse measures of participation with respect to academic performance to delineate the effectiveness/quality of higher education at the University of sydney (USYD). With the rising demand of higher education, USYD faces an increasing challenge to retain a prestigious image in quality tertiary education. Through a delineation of participation in comparing academic performance, this study should effectively underpin the relevant preemptive considerations required to initiate an appropriate response by the board. Canvas access having been recognised as the total number of weeks of at least one login during a given week and modes of study being either part or full time, comparisons of these parameters with respect to marks, should we determine the quality of education at USYD. Data related to our findings was acquired from Institutional Analytics and Planning with permission for usage granted approval by the DVC (Education) Prof. Pip Pattison. Thus, each subsection centres a focus around either parameter across an age or gender comparison for further analysis.
+
+<br>
+
+# Full Report
+
+## Initial Data Analysis (IDA)
+
+"One quarter (24 per cent) of youths and adults in the 2016 Census [had completed] a Bachelor Degree or above, up from 18 per cent a decade ago." (ABS, 2017). As the demand for higher education rises, this report seeks to find areas for improvement, using data from The University of Sydney (USYD) School of Mathematics. This analysis is critical for ensuring USYD produces high quality graduates. Providers of tertiary education consistently pursue new avenues of content delivery that may offer more flexibility to students. Hence, observing the use of online platforms and flexible modes of study is necessary to develop an understanding of their effectiveness, quantified through a comparison against academic performance to delineate effectiveness.
+
+Academic participation in nature has a very broad definition but, respectively canvas access and modes of study (full or part time) were defined measures in this study. Comparing these against academic performance with respect to marks achieved from units under Junior Mathematical Studies at the University of Sydney, these would substantiate the relative effectiveness of educational delivery from the provider. Further comparisons were made between students of domestic and international origin, gender, and age, allowing the identifications of groups that may require further attention. The failure to account for differences between each unit due to anonymity of the data does show potential to confound with analysis. Hence, this inhibits the capacity to investigate further into what limitations an individual unit may present. Moreover, whilst the focus of mathematical units can allow for inference on broad generalisations it is likely that across other disciplines of study it may not apply similarly to recognising limitations in different units of study. Canvas access is too broad to accurately delineate its effectiveness as the total number of accesses potentially becoming a confounder. This was included however to understand if it could imply the need for more focus by the board at USYD. 
+
+Confirmation for reliability and credibility was sought before usage of first and second hand references, first hand data having been sourced from the Sydney Institutional Analytics and Planning (IAP) and second hand ascertained within the bibliography. Moreover, ethics were appropriately adhered to, permission for usage of the data granted approval by the DVC (Education) Prof. Pip Pattison, where anonymity was also preserved. 
+
+```{r, echo = TRUE, message = FALSE}
+library(plotly)
+
+# LOAD DATA v1 - uncomment the link below to: load data direct from html
+setwd("C:/Users/anosh/Documents/Anosh's Data/!_Uni_!/Sem 1/DATA1001 - Intro to Data/Assignment 3")
+
+std = read.csv("Data/student_data.csv")
+
+# Quick look at top 5 rows of data
+head(std)
+```
+```{r, echo = TRUE, message = FALSE}
+## Size of data
+dim(std)
+```
+```{r, echo = TRUE, message = FALSE}
+## R's classification of data
+class(std)
+
+## R's classification of variables
+str(std)
+
+```
+
+## Understanding access to canvas with respect to gender to investigate the quality of education at USYD
+
+Searches of the PsycINFO database and internet yielded no papers published describing how use of online resources and marks are correlated, subgrouped into gender, so the relationship between academic participation and gender are relatively untested.
+
+<br>There are 2 possible non-null hypotheses:</br> 
+<br>Hypothesis 1: Increased use of online resources improves academic performance. 
+</br>
+<br>Hypothesis 2: Increased use of online resources reduces academic performance
+</br>
+
+If either of these hypotheses are true, then they may also be exhibited unevenly between Males and Females, which should also be investigated.
+
+```{r, message = FALSE}
+#Loading Packages
+library(tidyverse) 
+library(plotly) 
+library(dplyr)
+
+#Creating an Object with Sum of Canvas Access, & Mark for FEMALES
+CanvasF <- std %>% filter(std$Gender == "F")
+
+#Creating and object with Sum of Canvas Access, & Mark for MALES
+CanvasM <- std %>% filter(std$Gender == "M")
+
+#Creating Plot for FEMALES
+RLF = 
+  lm(CanvasF$Mark ~ CanvasF$SUM.canvas.Access)
+
+PlotF <- 
+  plot_ly(CanvasF, 
+          x = ~SUM.canvas.Access, 
+          y = ~Mark, type = 'scatter', 
+          marker = list(color = "deeppink",
+                        opacity = 0.025,
+                        size = 20
+                        )
+          ) %>%
+  add_lines(x = ~SUM.canvas.Access,
+            y = fitted(RLF),
+            line = list(color = "deeppink"),
+            showlegend = F,
+            inherit = F
+            ) %>%
+  layout(yaxis = list(visible = T,
+                      rangemode = "tozero"
+                      ),
+         xaxis = list(visible = T,
+                      rangemode = "tozero"
+                      )
+         ) %>%
+   add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -1.25,
+    y = 1.06,
+    size = 2,
+    text = "<b><i>Figure 1a<br>
+            </b></i>",
+    showarrow = FALSE
+   )
+         
+
+
+#Create Plot for MALES
+RLM = 
+  lm(CanvasM$Mark ~ CanvasM$SUM.canvas.Access)
+
+PlotM <- 
+  plot_ly(CanvasM, 
+          x = ~SUM.canvas.Access, 
+          y = ~Mark, type = 'scatter', 
+          marker = list(color = "mediumblue",
+                        opacity = 0.025,
+                        size = 20
+                        )
+          ) %>%
+  add_lines(x = ~SUM.canvas.Access,
+            y = fitted(RLM),
+            line = list(color = "mediumblue"),
+            showlegend = F,
+            inherit = F
+            ) %>%
+  layout(yaxis = list(visible = T,
+                      rangemode = "tozero"
+                      ),
+         xaxis = list(visible = T,
+                      rangemode = "tozero"
+                      )
+         )
+
+         
+#Combine both plots and Display
+PlotMF <-
+  subplot(PlotM, PlotF) %>%
+  layout(title = "Marks vs Canvas Access in Males and Females",
+         yaxis = list(visible = T,
+                      rangemode = "tozero",
+                      title = "Overall Mark"
+                      ),
+         xaxis = list(visible = T,
+                      rangemode = "tozero",
+                      title = "Number of Weeks Canvas Accessed"
+                      )
+         )
+
+#Display Combined Plots
+PlotMF
+```
+
+```{r, message = FALSE}
+cor(CanvasM$SUM.canvas.Access, CanvasM$Mark)
+cor(CanvasF$SUM.canvas.Access, CanvasF$Mark)
+```
+
+Results (figure 1a): Regression models generated for Sum of Weeks Canvas is Accessed versus Overall Mark show a slight positive correlation for both Male and Female subgroups, so higher use of canvas is a weak indicator of better performance. The male correlation coefficient (0.2048) was higher than the female (0.1792). However, the difference between the correlation coefficients is not statistically significant, due to high variance.
+
+Thus, if USYD can encourage greater use of canvas and potentially other online resources, it is possible that this can result in a greater level of academic achievement amongst the undergraduate cohort.
+
+## Understanding access to canvas with respect to age to investigate the quality of education at USYD
+
+Papers investigating the impact of online resources and grades in relation to student age appears to be limited, however, research into younger school-age students and the impact of age on marks shows that "student age [has] a statistically significant impact on academic achievement for students" (Voyles, 2011) and "older students within the cohort scored at higher academic levels of achievement" (Voyles, 2011) in certain subject areas. 
+
+In our research we used a scatter plot to determine how the age of a student may correlate with marks and canvas access. Figure 2a shows there is little difference in the number of students accessing canvas per age category. There is some variation with students in the 19-21 age group appearing to access canvas less but these differences can be attributed to the larger sample size of the 19-21 age group as more students attend university at this age. Similarly, the over 25 age group appears to be weighted towards accessing canvas more than other age groups but this can be attributed to the smaller sample size of this group. 
+
+Therefore, while there is a relationship between canvas access and marks, age appears to have little impact on this relationship, with the majority of students accessing canvas across all weeks. 
+
+
+```{r, message = FALSE}
+#Loading Packages
+library(tidyverse) 
+library(plotly) 
+library(dplyr) 
+#Creating an Object with Sum of Canvas Access, & Mark for FEMALES 
+CanvasF <- std
+#Creating and object with Sum of Canvas Access, & Mark for MALES 
+#CanvasM <- std %>% filter(std$Gender == "M") 
+#Creating Plot for FEMALES 
+RLF = 
+  lm(CanvasF$Mark ~ CanvasF$SUM.canvas.Access) 
+
+PlotF <- 
+  plot_ly(CanvasF, 
+          x = ~SUM.canvas.Access, 
+          y = ~Mark, type = 'scatter', color = ~Age.Category, 
+          marker = list(color = "deepblue") 
+          ) %>% 
+  add_lines(x = ~SUM.canvas.Access, 
+            y = fitted(RLF), 
+            line = list(color = "deepblue"), 
+            showlegend = F 
+            ) %>% 
+  layout(yaxis = list(visible = T, 
+                      rangemode = "tozero" 
+                      ), 
+         xaxis = list(visible = T, 
+                      rangemode = "tozero" 
+                      ) 
+         ) %>%
+   add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.10,
+    y = 1.06,
+    size = 2,
+    text = "<b><i>Figure 2a<br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+    
+      layout(
+    title = "Marks vs Canvas Access across different age categories"
+    ) 
+
+
+PlotF
+```
+
+## Understanding modes of study with respect to gender to investigate the quality of education at USYD
+
+Mode of study (full or part time) is affected by the notion that personal motivations can impact participation. Since the mode of study can be directly related to their involvement in overall studies, a relationship can be derived with academic performance. 
+
+Figures 3a and 3b reveals international students performing lower overall. Russell et al. (2010) found that 41% of international students experience substantial levels of stress, which are often a result of homesickness, cultural shocks, or perceived discrimination. Sam and Berry (2006) and Zhou et al. (2008) reaffirm this in studying student acculturation, having found emotional distress such as anxiety to develop due to issues in student acculturation and adaptation. (Harnett et al 2004) articulates this by revealing the negative impact of anxiety on academic performance. Furthermore, the figures depict slight differences in performance between gender subgroups. However, heir minimal differences do not support the basis for any significant situational factors in influencing performance. 
+
+Thus, whilst nationality poses as a potential influence to academic performance, greater individual participation through full-time engagement results in higher overall academic performance. As such, USYD should shift their focus to further assisting students with an  international background to achieve higher standards of overall academic performance.
+
+```{r, message = FALSE}
+library(plotly)
+
+fullmosd <- filter(std, std$Mode.of.Study == "Full Time" & std$Dom.Int == 'Domestic')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+
+p1 <- plot_ly(fullmosd, x = ~Mark, color = ~Gender, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("firebrick4", "dodgerblue")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.20,
+    y = 1.03,
+    size = 2,
+    text = "<b><i>Figure 3a<br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+    
+      layout(
+    title = "Comparing Domestic Part Time (right) and Full Time (left) Students"
+    , xaxis = x) 
+
+#SECOND GRAPH
+
+partmosd <- filter(std, std$Mode.of.Study == "Part Time" & std$Dom.Int == 'Domestic')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+
+p2 <- plot_ly(partmosd, x = ~Mark, color = ~Gender, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("firebrick4", "dodgerblue")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.13,
+    y = 1.03,
+    size = 2,
+    text = "Academic Performance Across Different Genders (Semester 1 & 2)<br>
+            ",
+    showarrow = FALSE
+    
+  ) %>%
+  layout(showlegend = FALSE, yaxis = ax
+      )
+
+
+p3 <- subplot(p1, p2)
+
+
+p3
+```
+
+```{r, message = FALSE}
+library(plotly)
+
+fullmosi <- filter(std, std$Mode.of.Study == "Full Time" & std$Dom.Int == 'International')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+
+p1 <- plot_ly(fullmosi, x = ~Mark, color = ~Gender, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("firebrick4", "dodgerblue")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.20,
+    y = 1.03,
+    size = 2,
+    text = "<b><i>Figure 3b<br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+    
+      layout(
+    title = "Comparing International Part Time (right) and Full Time (left) Students"
+    , xaxis = x) 
+
+#SECOND GRAPH
+
+partmosi <- filter(std, std$Mode.of.Study == "Part Time" & std$Dom.Int == 'International')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+
+p2 <- plot_ly(partmosi, x = ~Mark, color = ~Gender, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("firebrick4", "dodgerblue")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.13,
+    y = 1.03,
+    size = 2,
+    text = "Academic Performance Across Different Genders (Semester 1 & 2)<br>
+            ",
+    showarrow = FALSE
+    
+  ) %>%
+  layout(showlegend = FALSE, yaxis = ax
+      )
+
+
+p4 <- subplot(p1, p2)
+
+p4
+```
+
+## Understanding modes of study with respect to age to investigate the quality of education at USYD
+Recognising the varying motivations for higher education as a factor in deciding the mode of study, we can determine this degree of participation as a possible measure for academic success to assessing the quality in educational delivery. Although other confounders exist e.g. socio-economic status, prior education, etc. in distorting an understanding of their correlation, through generalising the results across full and part time students this would be sufficient in delineating a possible association between the variables. 
+
+Research from the Center for Community College Student Engagement at the University of Texas, Austin, derived that 34 percent of full time students for at least part of their studies had succeeded in achieving an associate's degree or certificate, whilst part time had only 23 percent. This rationale partly relies on the immersive nature of full time study and how individuals engaged in that mode are more involved typically with on-campus activities and experiences. As a result these prove to play a critical role in fostering more effective learning and networking opportunities that enhance student progress. These outcomes are also consistent with our data where full time domestic participants had achieved overall higher medians in each age category (4a). The same could be said for international students, however, only having two age categories recorded (4b) from international part time students no conclusion can be deduced. 
+
+Moreover, Zimitat's (2003) assessment on the impact of employment and family commitments on a full-time study basis substantiate the reduced attention for university study. This explains how the medians generally decline with older age groups of which older individuals  are more likely to be invested in other commitments and are thus less able to participate more so in university. Similarly, it is reflected amongst domestic and international subgroups. 
+
+Thus, a full time engagement in higher education studies proves to show some association with greater academic performance. These pose challenges to raising part time and older student performance.
+
+```{r, message = FALSE}
+library(plotly)
+
+fullmosd <- filter(std, std$Mode.of.Study == "Full Time" & std$Dom.Int == 'Domestic')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+
+p1 <- plot_ly(fullmosd, x = ~Mark, color = ~Age.Category, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("dodgerblue4", "burlywood1")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.20,
+    y = 1.03,
+    size = 2,
+    text = "<b><i>Figure 4a<br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+    
+      layout(
+    title = "Comparing Domestic Part Time (right) and Full Time (left) Students"
+    , xaxis = x) 
+
+#SECOND GRAPH
+
+partmosd <- filter(std, std$Mode.of.Study == "Part Time" & std$Dom.Int == 'Domestic')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+
+p2 <- plot_ly(partmosd, x = ~Mark, color = ~Age.Category, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("dodgerblue4", "burlywood1")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.13,
+    y = 1.03,
+    size = 2,
+    text = "Academic Performance Across Different Age Categories (Semester 1 & 2)<br>
+            ",
+    showarrow = FALSE
+    
+  ) %>%
+  layout(showlegend = FALSE, yaxis = ax
+      )
+
+
+p <- subplot(p1, p2)
+
+p
+
+
+```
+```{r, message = FALSE}
+library(plotly)
+
+fullmosi <- filter(std, std$Mode.of.Study == "Full Time" & std$Dom.Int == 'International')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+
+p1 <- plot_ly(fullmosi, x = ~Mark, color = ~Age.Category, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("dodgerblue4", "burlywood1")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.20,
+    y = 1.03,
+    size = 2,
+    text = "<b><i>Figure 4b<br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+    
+      layout(
+    title = "Comparing International Part Time (right) and Full Time (left) Students"
+    , xaxis = x) 
+
+#SECOND GRAPH
+
+partmosi <- filter(std, std$Mode.of.Study == "Part Time" & std$Dom.Int == 'International')
+
+
+
+
+x <- list(
+  title = "Academic Performance (mark out of 100)"
+)
+
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+
+p2 <- plot_ly(partmosi, x = ~Mark, color = ~Age.Category, type = "box", boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8, marker=list( size=3 , opacity=0.9), colors=c("dodgerblue4", "burlywood1")) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = 0.535,
+    y = 1.02,
+    size = 2,
+    text = "<b><i><br>
+            </b></i>",
+    showarrow = FALSE
+    
+  ) %>%
+  
+  add_annotations(
+    xref = "paper",
+    yref = "paper",
+    x = -0.13,
+    y = 1.03,
+    size = 2,
+    text = "Academic Performance Across Different Age Categories (Semester 1 & 2)<br>
+            ",
+    showarrow = FALSE
+    
+  ) %>%
+  layout(showlegend = FALSE, yaxis = ax
+      )
+
+
+p <- subplot(p1, p2)
+
+p
+
+
+```
+
+
+<br>
+
+
+
+# Conclusions
+
+From our investigation we have determined that both gender and age appear to have limited impact on the relationship between canvas access and marks, determining that USYD should focus efforts on improving canvas interaction as a whole rather than incorporating age and gender specific methods. In contrast, our results show that USYD should take into consideration the specific needs of international students as they tended to score lower than their domestic peers. Similarly, part-time students also tended to have lower academic results than full-time students indicating that USYD should focus on the overall academic participation of its students. Hence, our analysis poses the need for further investigation into canvas access and modes of study if we are to confirm conclusivity in the quality of education provided by USYD.
+
+
+<br>
+
+
+# References
+
+Bailey, M., Ifenthaler, D., Gosper, M., & Kretzschmar, M. (2014). Factors influencing tertiary
+students' choice of study mode. In B. Hegarty, J. McDonald, & S.-K. Loke (Eds.), Rhetoric and Reality:
+Critical perspectives on educational technology. Proceedings ascilite Dunedin 2014 (pp. 251-261).
+
+Full time VS Part Time studies - What is better for your child?. (2019). Retrieved from https://community.today.com/parentingteam/post/full-time-vs-part-time-studies-what-is-better-for-your-child
+
+Larkins, F. (2018). Gender enrolment trends in Australian universities. Retrieved from https://melbourne-cshe.unimelb.edu.au/lh-martin-institute/insights/gender-enrolment-trends-flarkins
+
+Li, G., Chen, W., & Duanmu, J. (2009). Determinants of International Students' Academic Performance. Journal Of Studies In International Education, 14(4), 389-405. doi: 10.1177/1028315309331490
+
+Pirmohamed, S., Debowska, A., & Boduszek, D. (2017). Gender differences in the correlates of academic achievement among university students. Journal Of Applied Research In Higher Education, 9(2), 313-324. doi: 10.1108/jarhe-03-2016-0015
+
+Rienties, B., Beausaert, S., Grohnert, T., Niemantsverdriet, S., & Kommers, P. (2011). Understanding academic performance of international students: the role of ethnicity, academic and social integration. Higher Education, 63(6), 685-700. doi: 10.1007/s10734-011-9468-1
+
+Voyles, M. (2011). STUDENT ACADEMIC SUCCESS AS RELATED TO STUDENT AGE AND GENDER (Ph.D). University of Tennessee.
+
+
+<br>
