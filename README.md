@@ -1,2 +1,18 @@
-# cerulean-cave
-Analysing measures of participation with respect to academic performance to delineate the effectiveness/quality of higher education at the universtiy of sydney (USYD)
+
+# Analysing measures of participation with respect to academic performance to delineate the effectiveness/quality of higher education at the universtiy of sydney (USYD)
+### By Anosh.S, Stuart.T, Matteus.R and Kshitij.M
+
+## Executive Summary
+
+This study attempts to analyse measures of participation with respect to academic performance to delineate the effectiveness/quality of higher education at the University of sydney (USYD). With the rising demand of higher education, USYD faces an increasing challenge to retain a prestigious image in quality tertiary education. Through a delineation of participation in comparing academic performance, this study should effectively underpin the relevant preemptive considerations required to initiate an appropriate response by the board. Canvas access having been recognised as the total number of weeks of at least one login during a given week and modes of study being either part or full time, comparisons of these parameters with respect to marks, should we determine the quality of education at USYD. Data related to our findings was acquired from Institutional Analytics and Planning with permission for usage granted approval by the DVC (Education) Prof. Pip Pattison. Thus, each subsection centres a focus around either parameter across an age or gender comparison for further analysis.
+
+<br>
+
+
+## Initial Data Analysis (IDA)
+
+“One quarter (24 per cent) of youths and adults in the 2016 Census [had completed] a Bachelor Degree or above, up from 18 per cent a decade ago.” (ABS, 2017). As the demand for higher education rises, this report seeks to find areas for improvement, using data from The University of Sydney (USYD) School of Mathematics. This analysis is critical for ensuring USYD produces high quality graduates. Providers of tertiary education consistently pursue new avenues of content delivery that may offer more flexibility to students. Hence, observing the use of online platforms and flexible modes of study is necessary to develop an understanding of their effectiveness, quantified through a comparison against academic performance to delineate effectiveness.
+
+Academic participation in nature has a very broad definition but, respectively canvas access and modes of study (full or part time) were defined measures in this study. Comparing these against academic performance with respect to marks achieved from units under Junior Mathematical Studies at the University of Sydney, these would substantiate the relative effectiveness of educational delivery from the provider. Further comparisons were made between students of domestic and international origin, gender, and age, allowing the identifications of groups that may require further attention. The failure to account for differences between each unit due to anonymity of the data does show potential to confound with analysis. Hence, this inhibits the capacity to investigate further into what limitations an individual unit may present. Moreover, whilst the focus of mathematical units can allow for inference on broad generalisations it is likely that across other disciplines of study it may not apply similarly to recognising limitations in different units of study. Canvas access is too broad to accurately delineate its effectiveness as the total number of accesses potentially becoming a confounder. This was included however to understand if it could imply the need for more focus by the board at USYD.
+
+Confirmation for reliability and credibility was sought before usage of first and second hand references, first hand data having been sourced from the Sydney Institutional Analytics and Planning (IAP) and second hand ascertained within the bibliography. Moreover, ethics were appropriately adhered to, permission for usage of the data granted approval by the DVC (Education) Prof. Pip Pattison, where anonymity was also preserved.
